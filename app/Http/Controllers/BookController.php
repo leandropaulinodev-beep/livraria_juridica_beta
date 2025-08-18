@@ -140,18 +140,20 @@ class BookController extends Controller
         $handle = fopen($file, "r");
 
         $header = fgetcsv($handle, 1000, ",");
-        $rowCount = 0;
+        $imported = 0;
+        $skipped = 0;
 
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             $row = array_combine($header, $data);
 
-            Validator::make($row, [
-                'title'      => 'required|string|max:255',
-                'author_id'  => 'required|exists:authors,id',
-                'subject_id' => 'required|exists:subjects,id',
-                'year'       => 'nullable|integer',
-                'price'      => 'nullable|string',
-            ])->validate();
+            // Validação manual para pular linhas inválidas
+            $authorExists = Author::where('id', $row['author_id'] ?? 0)->exists();
+            $subjectExists = Subject::where('id', $row['subject_id'] ?? 0)->exists();
+
+            if (!$authorExists || !$subjectExists || empty($row['title'])) {
+                $skipped++;
+                continue; // pula esta linha
+            }
 
             if(!empty($row['price'])){
                 $row['price'] = str_replace(['R$', '.', ','], ['', '', '.'], $row['price']);
@@ -159,13 +161,13 @@ class BookController extends Controller
             }
 
             Book::create($row);
-            $rowCount++;
+            $imported++;
         }
 
         fclose($handle);
 
         return redirect()->route('books.index')
-            ->with('success', "📥 $rowCount livros importados com sucesso!");
+            ->with('success', "📥 $imported livros importados com sucesso!");
     }
 
     /**
@@ -181,24 +183,20 @@ class BookController extends Controller
         return $pdf->download('relatorio_livros.pdf');
     }
 
- /**
- * 📊 Gerar gráfico de livros por assunto
- */
-public function chart()
-{
-    // Pega a quantidade de livros por assunto
-    $data = \DB::table('books')
-        ->join('subjects', 'books.subject_id', '=', 'subjects.id')
-        ->select('subjects.name', \DB::raw('count(books.id) as total'))
-        ->groupBy('subjects.name')
-        ->get();
+    /**
+     * 📊 Gerar gráfico de livros por assunto
+     */
+    public function chart()
+    {
+        $data = \DB::table('books')
+            ->join('subjects', 'books.subject_id', '=', 'subjects.id')
+            ->select('subjects.name', \DB::raw('count(books.id) as total'))
+            ->groupBy('subjects.name')
+            ->get();
 
-    // Se não houver dados, criar arrays vazios
-    $labels = $data->pluck('name')->toArray();
-    $totals = $data->pluck('total')->map(fn($x) => (int)$x)->toArray();
+        $labels = $data->pluck('name')->toArray();
+        $totals = $data->pluck('total')->map(fn($x) => (int)$x)->toArray();
 
-    return view('books.chart', compact('labels', 'totals'));
-}
-
-
+        return view('books.chart', compact('labels', 'totals'));
+    }
 }

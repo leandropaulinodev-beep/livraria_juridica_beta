@@ -9,7 +9,7 @@
             <a href="{{ route('books.create') }}" class="btn btn-success me-2">➕ Novo Livro</a>
             <a href="{{ route('books.import.form') }}" class="btn btn-primary me-2">⬆️ Importar CSV</a>
             <a href="{{ route('books.report.pdf') }}" class="btn btn-danger me-2">📑 Exportar PDF</a>
-            <a href="{{ route('books.chart') }}" class="btn btn-info">📊 Gráfico de Assuntos</a>
+            <a href="{{ route('books.chart') }}" class="btn btn-info">📊 Dashboard</a>
         </div>
     </div>
 

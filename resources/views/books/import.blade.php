@@ -31,7 +31,7 @@
                 <label class="form-label">Arquivo CSV</label>
                 <input type="file" name="csv_file" class="form-control" accept=".csv" required>
                 <div class="form-text">
-                    O arquivo deve conter as colunas: <strong>title, author, year, isbn</strong>.
+                    O arquivo deve conter as colunas: <strong>titulo, autor, ano, preço</strong>.
                 </div>
             </div>
 

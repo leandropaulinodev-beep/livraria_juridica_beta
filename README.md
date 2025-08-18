@@ -1,4 +1,4 @@
-# ⚖️ Livraria Jurídica
+# Livraria Jurídica
 
 ![Laravel](https://img.shields.io/badge/Laravel-10-orange)
 ![PHP](https://img.shields.io/badge/PHP-8.2-blue)

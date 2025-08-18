@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="h3 mb-4">📊 Gráfico de Livros por Assunto</h1>
+    <h1 class="h3 mb-4">📊 Quantidade de livros cadastrados por assunto</h1>
 
     <div class="card p-4" style="max-width: 500px; margin: auto;">
         <canvas id="booksChart" width="300" height="300"></canvas>
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             responsive: true,
             plugins: {
                 legend: { position: 'right' },
-                title: { display: true, text: 'Livros por Assunto' }
+                title: { display: true, text: 'Gráfio de livros cadastrados' }
             },
             layout: { padding: 10 },
             radius: '70%' // pizza ainda menor
