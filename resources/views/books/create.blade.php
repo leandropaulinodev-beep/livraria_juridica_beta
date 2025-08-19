@@ -34,12 +34,12 @@
 
         <div class="mb-3">
             <label for="year" class="form-label">Ano</label>
-            <input type="number" name="year" id="year" class="form-control">
+            <input type="number" name="year" id="year" class="form-control" required>
         </div>
 
         <div class="mb-3">
             <label for="price" class="form-label">Preço</label>
-            <input type="text" name="price" id="price" class="form-control" placeholder="R$ 0,00">
+            <input type="text" name="price" id="price" class="form-control" placeholder="R$ 0,00" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>
@@ -52,31 +52,24 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const priceInput = document.getElementById('price');
+    const form = priceInput.closest('form');
 
+    // Formata enquanto digita
     priceInput.addEventListener('input', function(e) {
-        let value = e.target.value;
-
-        // Remove tudo que não é número
-        value = value.replace(/\D/g, '');
-
-        if(!value) {
-            e.target.value = '';
-            return;
-        }
-
-        // Converte para decimal
+        let value = e.target.value.replace(/\D/g, '');
         value = (value / 100).toFixed(2);
-
-        // Troca ponto por vírgula
         value = value.replace('.', ',');
-
-        // Formata com R$ (opcional)
         e.target.value = 'R$ ' + value;
     });
 
-    // Remove "R$ " antes de enviar o formulário
-    priceInput.form.addEventListener('submit', function() {
-        priceInput.value = priceInput.value.replace('R$ ', '').replace(',', '.');
+    // Valida antes de enviar o formulário
+    form.addEventListener('submit', function(e) {
+        const value = priceInput.value.replace(/[^\d,]/g, '').replace(',', '.'); // pega só número
+        if (parseFloat(value) === 0) {
+            e.preventDefault(); // bloqueia envio
+            alert('Valor R$ 0,00 não é permitido!');
+            priceInput.focus();
+        }
     });
 });
 </script>

@@ -23,15 +23,15 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password123'), // senha de teste
         ]);
 
-        // ✍️ Autores
+        // Autores
         $author1 = Author::create(['name' => 'Machado de Assis']);
         $author2 = Author::create(['name' => 'Clarice Lispector']);
 
-        // 📚 Assuntos
+        // Assuntos
         $subject1 = Subject::create(['name' => 'Direito Constitucional']);
         $subject2 = Subject::create(['name' => 'Direito Penal']);
 
-        // 📖 Livros
+        // Livros
         Book::create([
             'title' => 'Dom Casmurro',
             'year' => 1899,
